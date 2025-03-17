@@ -1,6 +1,6 @@
 package com.web;
 
-import com.model.UserMealList;
+import com.dto.UserMealListRequest;
 import com.service.UserMealListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -29,7 +29,7 @@ public class MealTrackerController {
     }
 
     @GetMapping("/{userId}")
-    public UserMealList getUserMealList(@PathVariable UUID userId) {
+    public UserMealListRequest getUserMealList(@PathVariable UUID userId) {
         return userMealListService.getUserMealList(userId);
     }
 

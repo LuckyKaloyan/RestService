@@ -1,7 +1,9 @@
 package com.service;
 
+import com.dto.UserMealListRequest;
 import com.model.UserMealList;
 import com.repository.UserMealListRepository;
+import com.web.mapper.Mapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,40 +14,32 @@ import java.util.UUID;
 public class UserMealListService {
 
     private final UserMealListRepository userMealListRepository;
+    private final Mapper mapper;
 
     @Autowired
-    public UserMealListService(UserMealListRepository userMealListRepository) {
+    public UserMealListService(UserMealListRepository userMealListRepository, Mapper mapper) {
         this.userMealListRepository = userMealListRepository;
+        this.mapper = mapper;
     }
 
-    public UserMealList addMealToUser(UUID userId, UUID mealId) {
-
-        if (userMealListRepository.findByUserId(userId).isPresent()) {
-            UserMealList userMealList = userMealListRepository.findByUserId(userId).get();
-            userMealList.getMealsIds().add(mealId);
-            return userMealListRepository.save(userMealList);
-        }
-
-        UserMealList newUserMealList = UserMealList.builder()
-                .userId(userId)
-                .mealsIds(List.of(mealId))
-                .build();
-        return userMealListRepository.save(newUserMealList);
+    public void addMealToUser(UUID userId, UUID mealId) {
+        UserMealList userMealList = userMealListRepository.findByUserId(userId)
+                .orElseGet(() -> UserMealList.builder().userId(userId).mealsIds(List.of()).build());
+        userMealList.getMealsIds().add(mealId);
+        userMealListRepository.save(userMealList);
     }
 
-    public UserMealList getUserMealList(UUID userId) {
-        if(userMealListRepository.findByUserId(userId).isEmpty()){
-            return UserMealList.builder()
-                    .userId(userId)
-                    .mealsIds(List.of())
-                    .build();
-        }
-        return userMealListRepository.findByUserId(userId).get();
+    public UserMealListRequest getUserMealList(UUID userId) {
+        UserMealList userMealList = userMealListRepository.findByUserId(userId)
+                .orElseGet(() -> UserMealList.builder().userId(userId).mealsIds(List.of()).build());
+        return mapper.toRequest(userMealList);
     }
 
     public void deleteMealFromUser(UUID userId, int mealIndex) {
-        getUserMealList(userId).getMealsIds().remove(mealIndex);
-        userMealListRepository.save(getUserMealList(userId));
+        UserMealList userMealList = userMealListRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        userMealList.getMealsIds().remove(mealIndex);
+        userMealListRepository.save(userMealList);
     }
 
     @Transactional

@@ -1,13 +1,12 @@
 package com.service;
-
-import com.dto.UserMealListRequest;
 import com.model.UserMealList;
 import com.repository.UserMealListRepository;
+import com.web.dto.UserMealListRequest;
 import com.web.mapper.Mapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
@@ -24,14 +23,14 @@ public class UserMealListService {
 
     public void addMealToUser(UUID userId, UUID mealId) {
         UserMealList userMealList = userMealListRepository.findByUserId(userId)
-                .orElseGet(() -> UserMealList.builder().userId(userId).mealsIds(List.of()).build());
+                .orElseGet(() -> UserMealList.builder().userId(userId).mealsIds(new ArrayList<>()).build());
         userMealList.getMealsIds().add(mealId);
         userMealListRepository.save(userMealList);
     }
 
     public UserMealListRequest getUserMealList(UUID userId) {
         UserMealList userMealList = userMealListRepository.findByUserId(userId)
-                .orElseGet(() -> UserMealList.builder().userId(userId).mealsIds(List.of()).build());
+                .orElseGet(() -> UserMealList.builder().userId(userId).mealsIds(new ArrayList<>()).build());
         return mapper.toRequest(userMealList);
     }
 

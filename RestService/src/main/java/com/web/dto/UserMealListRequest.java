@@ -1,7 +1,6 @@
-package com.dto;
-
+package com.web.dto;
 import lombok.*;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,5 +11,5 @@ import java.util.UUID;
 @Builder
 public class UserMealListRequest {
     private UUID userId;
-    private List<UUID> mealsIds;
+    private List<UUID> mealsIds = new ArrayList<>();
 }

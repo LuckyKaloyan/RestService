@@ -1,7 +1,6 @@
 package com.web;
-
-import com.dto.UserMealListRequest;
 import com.service.UserMealListService;
+import com.web.dto.UserMealListRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

@@ -1,7 +1,7 @@
 package com.model;
-
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +22,6 @@ public class UserMealList {
 
     @ElementCollection
     @Column
-    private List<UUID> mealsIds;
+    private List<UUID> mealsIds = new ArrayList<>();
 
 }

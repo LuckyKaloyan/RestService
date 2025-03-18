@@ -1,6 +1,6 @@
 package com.web.mapper;
-import com.dto.UserMealListRequest;
 import com.model.UserMealList;
+import com.web.dto.UserMealListRequest;
 import org.springframework.stereotype.Component;
 
 @Component

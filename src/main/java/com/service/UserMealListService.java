@@ -93,4 +93,8 @@ public class UserMealListService {
             }
         });
     }
+
+    public void deleteAll(){
+        userMealListRepository.deleteAll();
+    }
 }

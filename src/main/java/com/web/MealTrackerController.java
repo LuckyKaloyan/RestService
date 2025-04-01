@@ -24,7 +24,7 @@ public class MealTrackerController {
         userMealListService.addMealToUser(userId, mealId);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "http://localhost:8080/calculator/did_you_eat_enough_today");
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        return new ResponseEntity<>(headers, HttpStatus.OK);
     }
 
     @GetMapping("/{userId}")
@@ -37,7 +37,7 @@ public class MealTrackerController {
         userMealListService.deleteMealFromUser(userId, mealIndex);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "http://localhost:8080/calculator/did_you_eat_enough_today");
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        return new ResponseEntity<>(headers, HttpStatus.OK);
     }
 
     @DeleteMapping("/removeMealFromAllUsers/{mealId}")

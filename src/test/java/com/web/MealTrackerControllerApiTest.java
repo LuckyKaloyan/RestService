@@ -8,9 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-
 import java.util.UUID;
-
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -29,7 +27,7 @@ public class MealTrackerControllerApiTest {
     private final UserMealListRequest testMealListRequest = new UserMealListRequest();
 
     @Test
-    void addMealToUser_ShouldReturnFoundStatusWithLocationHeader() throws Exception {
+    void addMealToUserReturnFoundStatusWithLocationHeader() throws Exception {
         mockMvc.perform(post("/api/v1/meal_tracker/{userId}", testUserId)
                         .param("mealId", testMealId.toString()))
                 .andExpect(status().isFound())
@@ -40,18 +38,17 @@ public class MealTrackerControllerApiTest {
     }
 
     @Test
-    void getUserMealList_ShouldReturnUserMealList() throws Exception {
+    void getUserMealListReturnUserMealList() throws Exception {
         when(userMealListService.getUserMealList(testUserId)).thenReturn(testMealListRequest);
 
         mockMvc.perform(get("/api/v1/meal_tracker/{userId}", testUserId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-
         verify(userMealListService).getUserMealList(testUserId);
     }
 
     @Test
-    void deleteMealFromUser_ShouldReturnFoundStatusWithLocationHeader() throws Exception {
+    void deleteMealFromUserReturnFoundStatusWithLocationHeader() throws Exception {
         int mealIndex = 1;
 
         mockMvc.perform(delete("/api/v1/meal_tracker/{userId}", testUserId)
@@ -64,7 +61,7 @@ public class MealTrackerControllerApiTest {
     }
 
     @Test
-    void removeMealFromAllUsers_ShouldReturnNoContent() throws Exception {
+    void removeMealFromAllUsersReturnNoContent() throws Exception {
         mockMvc.perform(delete("/api/v1/meal_tracker/removeMealFromAllUsers/{mealId}", testMealId))
                 .andExpect(status().isNoContent());
 
@@ -72,27 +69,24 @@ public class MealTrackerControllerApiTest {
     }
 
     @Test
-    void addMealToUser_ShouldReturnBadRequestWhenMealIdMissing() throws Exception {
+    void addMealToUserReturnBadRequestWhenMealIdMissing() throws Exception {
         mockMvc.perform(post("/api/v1/meal_tracker/{userId}", testUserId))
                 .andExpect(status().isBadGateway());
-
         verify(userMealListService, never()).addMealToUser(any(), any());
     }
 
     @Test
-    void deleteMealFromUser_ShouldReturnBadRequestWhenMealIndexMissing() throws Exception {
+    void deleteMealFromUserReturnBadRequestWhenMealIndexMissing() throws Exception {
         mockMvc.perform(delete("/api/v1/meal_tracker/{userId}", testUserId))
                 .andExpect(status().isBadGateway());
-
         verify(userMealListService, never()).deleteMealFromUser(any(), anyInt());
     }
 
     @Test
-    void deleteMealFromUser_ShouldReturnBadRequestWhenMealIndexInvalid() throws Exception {
+    void deleteMealFromUserReturnBadRequestWhenMealIndexInvalid() throws Exception {
         mockMvc.perform(delete("/api/v1/meal_tracker/{userId}", testUserId)
                         .param("mealIndex", "invalid"))
                 .andExpect(status().isBadGateway());
-
         verify(userMealListService, never()).deleteMealFromUser(any(), anyInt());
     }
 }

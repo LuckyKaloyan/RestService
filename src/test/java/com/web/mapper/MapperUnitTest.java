@@ -17,17 +17,12 @@ class MapperUnitTest {
 
     @Test
     void toRequest_ShouldMapAllFieldsCorrectly() {
-        // Given
         UUID userId = UUID.randomUUID();
         UserMealList entity = UserMealList.builder()
                 .userId(userId)
                 .mealsIds(Arrays.asList(UUID.randomUUID(), UUID.randomUUID()))
                 .build();
-
-        // When
         UserMealListRequest request = mapper.toRequest(entity);
-
-        // Then
         assertNotNull(request);
         assertEquals(userId, request.getUserId());
         assertEquals(2, request.getMealsIds().size());
@@ -36,17 +31,12 @@ class MapperUnitTest {
 
     @Test
     void toRequest_ShouldHandleEmptyMealsList() {
-        // Given
         UUID userId = UUID.randomUUID();
         UserMealList entity = UserMealList.builder()
                 .userId(userId)
                 .mealsIds(Collections.emptyList())
                 .build();
-
-        // When
         UserMealListRequest request = mapper.toRequest(entity);
-
-        // Then
         assertNotNull(request);
         assertEquals(userId, request.getUserId());
         assertTrue(request.getMealsIds().isEmpty());
@@ -59,17 +49,12 @@ class MapperUnitTest {
 
     @Test
     void toEntity_ShouldMapAllFieldsCorrectly() {
-        // Given
         UUID userId = UUID.randomUUID();
         UserMealListRequest request = UserMealListRequest.builder()
                 .userId(userId)
                 .mealsIds(Arrays.asList(UUID.randomUUID(), UUID.randomUUID()))
                 .build();
-
-        // When
         UserMealList entity = mapper.toEntity(request);
-
-        // Then
         assertNotNull(entity);
         assertEquals(userId, entity.getUserId());
         assertEquals(2, entity.getMealsIds().size());
@@ -78,17 +63,13 @@ class MapperUnitTest {
 
     @Test
     void toEntity_ShouldHandleEmptyMealsList() {
-        // Given
         UUID userId = UUID.randomUUID();
         UserMealListRequest request = UserMealListRequest.builder()
                 .userId(userId)
                 .mealsIds(Collections.emptyList())
                 .build();
 
-        // When
         UserMealList entity = mapper.toEntity(request);
-
-        // Then
         assertNotNull(entity);
         assertEquals(userId, entity.getUserId());
         assertTrue(entity.getMealsIds().isEmpty());
@@ -101,18 +82,14 @@ class MapperUnitTest {
 
     @Test
     void bidirectionalMapping_ShouldBeConsistent() {
-        // Given
         UUID userId = UUID.randomUUID();
         UserMealList originalEntity = UserMealList.builder()
                 .userId(userId)
                 .mealsIds(Arrays.asList(UUID.randomUUID(), UUID.randomUUID()))
                 .build();
 
-        // When
         UserMealListRequest request = mapper.toRequest(originalEntity);
         UserMealList mappedEntity = mapper.toEntity(request);
-
-        // Then
         assertEquals(originalEntity.getUserId(), mappedEntity.getUserId());
         assertEquals(originalEntity.getMealsIds(), mappedEntity.getMealsIds());
     }

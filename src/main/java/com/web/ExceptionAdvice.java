@@ -1,6 +1,7 @@
 package com.web;
 
 
+import com.exception.NotFoundException;
 import com.web.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 public class ExceptionAdvice {
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-@ExceptionHandler(NoResourceFoundException.class)
+@ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFound(){
     ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(),"Resource not found!");
     return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);

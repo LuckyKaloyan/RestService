@@ -16,7 +16,7 @@ class MapperUnitTest {
     private final Mapper mapper = new Mapper();
 
     @Test
-    void toRequest_ShouldMapAllFieldsCorrectly() {
+    void toRequestMapAllFieldsCorrectly() {
         UUID userId = UUID.randomUUID();
         UserMealList entity = UserMealList.builder()
                 .userId(userId)
@@ -30,7 +30,7 @@ class MapperUnitTest {
     }
 
     @Test
-    void toRequest_ShouldHandleEmptyMealsList() {
+    void toRequestHandleEmptyMealsList() {
         UUID userId = UUID.randomUUID();
         UserMealList entity = UserMealList.builder()
                 .userId(userId)
@@ -43,12 +43,12 @@ class MapperUnitTest {
     }
 
     @Test
-    void toRequest_ShouldHandleNullInput() {
+    void toRequestHandleNullInput() {
         assertThrows(NullPointerException.class, () -> mapper.toRequest(null));
     }
 
     @Test
-    void toEntity_ShouldMapAllFieldsCorrectly() {
+    void toEntityMapAllFieldsCorrectly() {
         UUID userId = UUID.randomUUID();
         UserMealListRequest request = UserMealListRequest.builder()
                 .userId(userId)
@@ -62,7 +62,7 @@ class MapperUnitTest {
     }
 
     @Test
-    void toEntity_ShouldHandleEmptyMealsList() {
+    void toEntityHandleEmptyMealsList() {
         UUID userId = UUID.randomUUID();
         UserMealListRequest request = UserMealListRequest.builder()
                 .userId(userId)
@@ -76,12 +76,12 @@ class MapperUnitTest {
     }
 
     @Test
-    void toEntity_ShouldHandleNullInput() {
+    void toEntityHandleNullInput() {
         assertThrows(NullPointerException.class, () -> mapper.toEntity(null));
     }
 
     @Test
-    void bidirectionalMapping_ShouldBeConsistent() {
+    void bidirectionalMappingBeConsistent() {
         UUID userId = UUID.randomUUID();
         UserMealList originalEntity = UserMealList.builder()
                 .userId(userId)
@@ -93,4 +93,5 @@ class MapperUnitTest {
         assertEquals(originalEntity.getUserId(), mappedEntity.getUserId());
         assertEquals(originalEntity.getMealsIds(), mappedEntity.getMealsIds());
     }
+
 }

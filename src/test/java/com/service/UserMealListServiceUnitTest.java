@@ -41,7 +41,7 @@ class UserMealListServiceUnitTest {
     }
 
     @Test
-    void addMealToUser_shouldAddMealToExistingList() {
+    void addMealToUserAddMealToExistingList() {
         UserMealList existingList = new UserMealList();
         existingList.setUserId(userId);
         existingList.setMealsIds(new ArrayList<>(Arrays.asList(UUID.randomUUID())));
@@ -52,14 +52,14 @@ class UserMealListServiceUnitTest {
     }
 
     @Test
-    void addMealToUser_shouldCreateNewListWhenNotExists() {
+    void addMealToUserCreateNewListWhenNotExists() {
         when(userMealListRepository.findByUserId(userId)).thenReturn(Optional.empty());
         userMealListService.addMealToUser(userId, mealId);
         assertDoesNotThrow(() -> userMealListService.addMealToUser(userId, mealId));
     }
 
     @Test
-    void getUserMealList_shouldReturnListWithMeals() {
+    void getUserMealListReturnListWithMeals() {
         UserMealList existingList = new UserMealList();
         existingList.setUserId(userId);
         existingList.setMealsIds(new ArrayList<>(Arrays.asList(mealId)));
@@ -75,7 +75,7 @@ class UserMealListServiceUnitTest {
     }
 
     @Test
-    void deleteMealFromUser_shouldRemoveMeal() {
+    void deleteMealFromUserRemoveMeal() {
         UUID mealId2 = UUID.randomUUID();
         UserMealList existingList = new UserMealList();
         existingList.setUserId(userId);
@@ -86,7 +86,7 @@ class UserMealListServiceUnitTest {
         assertEquals(mealId2, existingList.getMealsIds().get(0));
     }
     @Test
-    void deleteAllMealsWithId_shouldRemoveSpecificMeal() {
+    void deleteAllMealsWithIdRemoveSpecificMeal() {
         UUID mealId2 = UUID.randomUUID();
         UserMealList list1 = new UserMealList();
         list1.setUserId(UUID.randomUUID());
@@ -102,11 +102,38 @@ class UserMealListServiceUnitTest {
     }
 
     @Test
-    void inputValidation_shouldThrowForNullInputs() {
+    void inputValidationThrowForNullInputs() {
         assertThrows(IllegalArgumentException.class, () -> userMealListService.addMealToUser(null, mealId));
         assertThrows(IllegalArgumentException.class, () -> userMealListService.addMealToUser(userId, null));
         assertThrows(IllegalArgumentException.class, () -> userMealListService.getUserMealList(null));
         assertThrows(IllegalArgumentException.class, () -> userMealListService.deleteMealFromUser(null, 0));
         assertThrows(IllegalArgumentException.class, () -> userMealListService.deleteAllMealsWithId(null));
+    }
+
+    @Test
+    void shouldThrowWhenRepositoryIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new UserMealListService(null, mapper));
+        assertEquals("UserMealListRepository cannot be null", exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowWhenMapperIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new UserMealListService(userMealListRepository, null));
+        assertEquals("Mapper cannot be null", exception.getMessage());
+    }
+
+    @Test
+    void shouldCreateServiceWhenDependenciesAreValid() {
+        assertDoesNotThrow(() -> new UserMealListService(userMealListRepository, mapper));
+    }
+
+    @Test
+    void deleteMealFromUserThrowWhenMealIndexOutOfBounds() {
+        UUID userId = UUID.randomUUID();
+        UserMealList userMealList = new UserMealList();
+        userMealList.setUserId(userId);
+        userMealList.setMealsIds(new ArrayList<>());
+        when(userMealListRepository.findByUserId(userId)).thenReturn(Optional.of(userMealList));
+        assertThrows(IndexOutOfBoundsException.class, () -> userMealListService.deleteMealFromUser(userId, 0));
     }
 }
